@@ -1,6 +1,6 @@
 <html>
   <head>
-    <% include ../partials/head %>
+    <% include ('../partials/head') %>
     <style>
       body {
         background: #e3ecf1;
@@ -14,7 +14,7 @@
   </head>
   <body>
     <header>
-      <% include ../partials/header %>
+      <% include ('../partials/header') %>
     </header>
     <main>
       <p>YOUR QUESTION</p>
@@ -24,19 +24,18 @@
         style="width: 10%; height: 5%; border: 1px solid black;"
       ></canvas>
       
-      <button style="margin: 10px;"><a href="/question2">SUBMIT</a></button>
+      <button style="margin: 10px;"><a id="next">SUBMIT</a></button>
     </main>
     <footer>
-      <% include ../partials/footer %>
+      <% include ('../partials/footer') %>
     </footer>
-  </body>
   <script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script>
-     var newY1 = 0;
-     var newX=0;
-     var ctx = document.getElementById('myChart').getContext('2d');
-     var myChart = new Chart(ctx, {
+     let newY1 = 0;
+     let newX=0;
+     let ctx = document.getElementById('myChart').getContext('2d');
+     let myChart = new Chart(ctx, {
     type: 'line',
     data: {
         labels: [2016,2017,2018,2019,2020,2021],
@@ -79,12 +78,12 @@
         }
     }
 });
-function chartClicked(event) {
-  var yTop = myChart.chartArea.top;
-  var yBottom = myChart.chartArea.bottom;
+const chartClicked = (event) => {
+  let yTop = myChart.chartArea.top;
+  let yBottom = myChart.chartArea.bottom;
 
-  var yMin = myChart.scales["y-axis-0"].min;
-  var yMax = myChart.scales["y-axis-0"].max;
+  let yMin = myChart.scales["y-axis-0"].min;
+  let yMax = myChart.scales["y-axis-0"].max;
   
 
   if (event.offsetY <= yBottom && event.offsetY >= yTop) {
@@ -93,10 +92,10 @@ function chartClicked(event) {
     newY1 = newY1 * Math.abs(yMax - yMin) + yMin;
   }
 
-  var xTop = myChart.chartArea.left;
-  var xBottom = myChart.chartArea.right;
-  var xMin = myChart.scales["x-axis-0"].min;
-  var xMax = myChart.scales["x-axis-0"].max;
+  let xTop = myChart.chartArea.left;
+  let xBottom = myChart.chartArea.right;
+  let xMin = myChart.scales["x-axis-0"].min;
+  let xMax = myChart.scales["x-axis-0"].max;
   
 
   if (event.offsetX <= xBottom && event.offsetX >= xTop) {
@@ -106,9 +105,11 @@ function chartClicked(event) {
 
   myChart.data.datasets[0].data=[200,100,125,80,newY1],
   myChart.update();
- 
+  const anchorRef = document.getElementById('next');
+  anchorRef.setAttribute('href',`/question2?val=${Math.floor(newY1)}`);
+  console.log(newY1);
 }
 
-
-  </script>
+</script>
+</body>
 </html>

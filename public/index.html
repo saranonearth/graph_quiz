@@ -1,11 +1,55 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>State Survey</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>STATE QUIZ</title>
+    <style>
+      body {
+        background: #c8e8fb;
+        background: linear-gradient(
+          to right,
+          #3d98cf 0%,
+          #3d98cf 56%,
+          #c8e8fb 56%,
+          #c8e8fb 100%
+        );
+      }
+      .container {
+        display: flex;
+        margin-top: 6%;
+      }
+      .IndiaMap {
+        width: 50%;
+        margin-left: 0%;
+      }
+      .startingBox {
+        margin-top: 12%;
+        margin-left: 9%;
+        font-size: 17px;
+      }
+      .startButton {
+        margin-left: 27%;
+        background-color: transparent;
+        height: 15%;
+        width: 50%;
+        font-size: 40px;
+        border: none;
+        border: 1px solid rgb(178, 228, 231);
+        border-radius: 70px;
+        cursor: pointer;
+        box-shadow: 7px 7px 14px #aecada, -7px -7px 14px #e2ffff;
+      }
+    </style>
   </head>
   <body>
-    Content here
-    <script type="text/javascript" src="script.js"></script>
+    <div class="container">
+      <img src="../assets/IN-EPS-01-0005.jpg" class="IndiaMap" />
+      <div class="startingBox">
+        <h1>DO YOU KNOW YOUR STATE WELL ?</h1>
+        <button class="startButton">
+          <a href="/question1" style="text-decoration: none;">Start Quiz</a>
+        </button>
+      </div>
+    </div>
+    <script type="text/javascript" src="/script.js"></script>
   </body>
 </html>

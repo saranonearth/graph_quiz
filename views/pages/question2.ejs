@@ -1,6 +1,6 @@
 <html>
   <head>
-    <% include ../partials/head %>
+    <% include ('../partials/head') %>
     <style>
       body {
         background: #e3ecf1;
@@ -11,7 +11,7 @@
   </head>
   <body>
     <header>
-      <% include ../partials/header %>
+      <% include ('../partials/head') %>
     </header>
     <main>
       <p>YOUR QUESTION</p>
@@ -21,19 +21,20 @@
         style="width: 10%; height: 5%; border: 1px solid black;"
       ></canvas>
       
-      <button style="margin: 10px;">SUBMIT</button>
+      <button style="margin: 10px;" onclick="submitData()">SUBMIT</button>
     </main>
     <footer>
-      <% include ../partials/footer %>
+      <% include ('../partials/footer') %>
     </footer>
   </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
   <script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script>
-     var newY2 = 0;
-     var newX=0;
-     var ctx = document.getElementById('myChart').getContext('2d');
-     var myChart = new Chart(ctx, {
+     let newY2 = 0;
+     let newX=0;
+     let ctx = document.getElementById('myChart').getContext('2d');
+     let myChart = new Chart(ctx, {
     type: 'line',
     data: {
         labels: [2016,2017,2018,2019,2020,2021],
@@ -76,12 +77,12 @@
         }
     }
 });
-function chartClicked(event) {
-  var yTop = myChart.chartArea.top;
-  var yBottom = myChart.chartArea.bottom;
+const chartClicked = (event) => {
+  let yTop = myChart.chartArea.top;
+  let yBottom = myChart.chartArea.bottom;
 
-  var yMin = myChart.scales["y-axis-0"].min;
-  var yMax = myChart.scales["y-axis-0"].max;
+  let yMin = myChart.scales["y-axis-0"].min;
+  let yMax = myChart.scales["y-axis-0"].max;
   
 
   if (event.offsetY <= yBottom && event.offsetY >= yTop) {
@@ -90,10 +91,10 @@ function chartClicked(event) {
     newY2 = newY2 * Math.abs(yMax - yMin) + yMin;
   }
 
-  var xTop = myChart.chartArea.left;
-  var xBottom = myChart.chartArea.right;
-  var xMin = myChart.scales["x-axis-0"].min;
-  var xMax = myChart.scales["x-axis-0"].max;
+  let xTop = myChart.chartArea.left;
+  let xBottom = myChart.chartArea.right;
+  let xMin = myChart.scales["x-axis-0"].min;
+  let xMax = myChart.scales["x-axis-0"].max;
   
 
   if (event.offsetX <= xBottom && event.offsetX >= xTop) {
@@ -106,6 +107,9 @@ function chartClicked(event) {
  
 }
 
-
+const submitData = async ()=>{
+  const res = await axios.post('/submit',{val:Math.floor(newY2)},{headers:{'Content-type':'application/json'}});
+  console.log(res.data);
+}
   </script>
 </html>
