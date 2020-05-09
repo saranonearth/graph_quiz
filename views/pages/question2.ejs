@@ -1,0 +1,111 @@
+<html>
+  <head>
+    <% include ../partials/head %>
+    <style>
+      body {
+        background: #e3ecf1;
+        text-align: center;
+      }
+    </style>
+    
+  </head>
+  <body>
+    <header>
+      <% include ../partials/header %>
+    </header>
+    <main>
+      <p>YOUR QUESTION</p>
+      <canvas
+      onclick="chartClicked(event)"
+      id="myChart"
+        style="width: 10%; height: 5%; border: 1px solid black;"
+      ></canvas>
+      
+      <button style="margin: 10px;">SUBMIT</button>
+    </main>
+    <footer>
+      <% include ../partials/footer %>
+    </footer>
+  </body>
+  <script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script>
+     var newY2 = 0;
+     var newX=0;
+     var ctx = document.getElementById('myChart').getContext('2d');
+     var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [2016,2017,2018,2019,2020,2021],
+        datasets: [{
+            label: 'Budget',
+            data: [150,80,55,80],
+            backgroundColor: 'transparent',
+            borderColor: "blue",
+            borderWidth: 2
+        }]
+    },
+    options: {
+        elements:{
+            line:{
+                tension:0.3,
+            }
+        },
+        
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                },
+                gridLines: {
+                    zeroLineColor: 'rgba(38,38,38,1)'
+                }
+                
+            }],
+            
+            xAxes: [{
+                ticks: {
+                    beginAtZero: true
+                },
+                gridLines : {
+                    zeroLineColor: 'rgba(38,38,38,1)',
+                    
+                    
+                }
+            }]
+        }
+    }
+});
+function chartClicked(event) {
+  var yTop = myChart.chartArea.top;
+  var yBottom = myChart.chartArea.bottom;
+
+  var yMin = myChart.scales["y-axis-0"].min;
+  var yMax = myChart.scales["y-axis-0"].max;
+  
+
+  if (event.offsetY <= yBottom && event.offsetY >= yTop) {
+    newY2 = Math.abs((event.offsetY - yTop) / (yBottom - yTop));
+    newY2 = (newY2 - 1) * -1;
+    newY2 = newY2 * Math.abs(yMax - yMin) + yMin;
+  }
+
+  var xTop = myChart.chartArea.left;
+  var xBottom = myChart.chartArea.right;
+  var xMin = myChart.scales["x-axis-0"].min;
+  var xMax = myChart.scales["x-axis-0"].max;
+  
+
+  if (event.offsetX <= xBottom && event.offsetX >= xTop) {
+    newX = Math.abs((event.offsetX - xTop) / (xBottom - xTop));
+    newX = newX * Math.abs(xMax - xMin) + xMin;
+  }
+
+  myChart.data.datasets[0].data=[150,80,55,80,newY2],
+  myChart.update();
+ 
+}
+
+
+  </script>
+</html>
