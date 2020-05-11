@@ -24,17 +24,20 @@
         style="width: 10%; height: 5%; border: 1px solid black;"
       ></canvas>
       
-      <button style="margin: 10px;"><a id="next">SUBMIT</a></button>
+      <button style="margin: 10px;" id="next" onclick="clickHandler()">Submit</button>
+      <div id="result"></div>
     </main>
     <footer>
       <% include ('../partials/footer') %>
     </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
   <script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script>
      let newY1 = 0;
      let newX=0;
      let ctx = document.getElementById('myChart').getContext('2d');
+     let clicked = false;
      let myChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -79,12 +82,15 @@
     }
 });
 const chartClicked = (event) => {
+  clicked = true;
+  
   let yTop = myChart.chartArea.top;
   let yBottom = myChart.chartArea.bottom;
 
   let yMin = myChart.scales["y-axis-0"].min;
   let yMax = myChart.scales["y-axis-0"].max;
-  
+
+  const values = [0,20,40,60,80,100,120,140,160,180,200];
 
   if (event.offsetY <= yBottom && event.offsetY >= yTop) {
     newY1 = Math.abs((event.offsetY - yTop) / (yBottom - yTop));
@@ -103,13 +109,28 @@ const chartClicked = (event) => {
     newX = newX * Math.abs(xMax - xMin) + xMin;
   }
 
-  myChart.data.datasets[0].data=[200,100,125,80,newY1],
+  const selectedVal = values.find(e=>e>newY1);
+  myChart.data.datasets[0].data=[200,100,125,80,selectedVal],
   myChart.update();
-  const anchorRef = document.getElementById('next');
-  anchorRef.setAttribute('href',`/question2?val=${Math.floor(newY1)}`);
   console.log(newY1);
 }
-
+const clickHandler = async () => {
+  if(!clicked) {
+    alert('Please select your answer');
+  }  
+  else {
+    const res = await axios.get('/check',{params:{level:1,value:Math.floor(newY1)}});
+    console.log(res.data);
+    if(res.data.okay) {
+      document.getElementById('result').innerHTML = res.data.message;
+    } else {
+      document.getElementById('result').innerHTML = `${res.data.message}`;
+    }
+    setTimeout(()=>{
+      window.location.replace('/question2')
+    },1000);
+  }
+};
 </script>
 </body>
 </html>

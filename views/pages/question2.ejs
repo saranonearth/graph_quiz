@@ -22,6 +22,7 @@
       ></canvas>
       
       <button style="margin: 10px;" onclick="submitData()">SUBMIT</button>
+      <div id="result"></div>
     </main>
     <footer>
       <% include ('../partials/footer') %>
@@ -32,6 +33,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script>
      let newY2 = 0;
+     let clicked = false;
      let newX=0;
      let ctx = document.getElementById('myChart').getContext('2d');
      let myChart = new Chart(ctx, {
@@ -78,12 +80,15 @@
     }
 });
 const chartClicked = (event) => {
+  clicked = true;
+
   let yTop = myChart.chartArea.top;
   let yBottom = myChart.chartArea.bottom;
 
   let yMin = myChart.scales["y-axis-0"].min;
   let yMax = myChart.scales["y-axis-0"].max;
   
+  const values = [0,20,40,60,80,100,120,140,160,180,200];
 
   if (event.offsetY <= yBottom && event.offsetY >= yTop) {
     newY2 = Math.abs((event.offsetY - yTop) / (yBottom - yTop));
@@ -102,14 +107,28 @@ const chartClicked = (event) => {
     newX = newX * Math.abs(xMax - xMin) + xMin;
   }
 
-  myChart.data.datasets[0].data=[150,80,55,80,newY2],
+  const selectedVal = values.find(e=>e>newY2);
+  myChart.data.datasets[0].data=[150,80,55,80,selectedVal],
   myChart.update();
- 
+  console.log(newY2);
 }
 
 const submitData = async ()=>{
-  const res = await axios.post('/submit',{val:Math.floor(newY2)},{headers:{'Content-type':'application/json'}});
-  console.log(res.data);
+  if(!clicked) {
+    alert('Please select your answer');
+  }  
+  else {
+    const res = await axios.get('/check',{params:{level:2,value:Math.floor(newY2)}});
+    console.log(res.data);
+    if(res.data.okay) {
+      document.getElementById('result').innerHTML = res.data.message;
+    } else {
+      document.getElementById('result').innerHTML = `${res.data.message}`;
+    }
+  }
+  const res = await axios.post('/submit',null,{headers:{'Content-type':'application/json'}});
+  alert('Thank you for participating');
+  window.location.replace('/');
 }
   </script>
 </html>
