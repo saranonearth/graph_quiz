@@ -1,3 +1,7 @@
 body {
-  background-color: rebeccapurple;
+  background: #e3ecf1;
+  text-align: center;
+}
+a {
+  text-decoration: none;
 }

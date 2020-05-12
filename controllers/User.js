@@ -1,6 +1,6 @@
 //User controllers here
 const mongoose = require("mongoose");
-const User = require("../Models/User");
+const User = require("../models/User");
 
 const addUser = async (ans) => {
   const answers = [...ans];
