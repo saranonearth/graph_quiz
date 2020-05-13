@@ -1,55 +1,105 @@
-<!DOCTYPE html>
 <html>
   <head>
     <title>STATE QUIZ</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+      rel="stylesheet"
+    />
     <style>
       body {
-        background: #c8e8fb;
-        background: linear-gradient(
-          to right,
-          #3d98cf 0%,
-          #3d98cf 56%,
-          #c8e8fb 56%,
-          #c8e8fb 100%
+        text-align: center;
+        background: -webkit-linear-gradient(
+          left,
+          black 0%,
+          black 5%,
+          #f0f8fa 5%,
+          #f0f8fa 95%,
+          black 95%,
+          black 100%
         );
+      }
+      .image {
+        width: 95%;
+        margin: -60px 0 0 -40px;
+        -webkit-animation: spin 60s linear infinite;
+        -moz-animation: spin 60s linear infinite;
+        animation: spin 60s linear infinite;
+        border-radius: 50%;
+      }
+      @-moz-keyframes spin {
+        100% {
+          -moz-transform: rotate(360deg);
+        }
+      }
+      @-webkit-keyframes spin {
+        100% {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+      @keyframes spin {
+        100% {
+          -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+        }
       }
       .container {
         display: flex;
-        margin-top: 6%;
+        position: fixed;
+        top: 58%;
+        left: 53%;
+        transform: translate(-50%, -50%);
       }
-      .IndiaMap {
-        width: 50%;
-        margin-left: 0%;
+
+      .heading {
+        font-family: "Poppins", sans-serif;
       }
-      .startingBox {
-        margin-top: 12%;
-        margin-left: 9%;
-        font-size: 17px;
-      }
+
       .startButton {
-        margin-left: 27%;
+        /* margin-left: 27%; */
+        font-family: "Poppins", sans-serif;
+        position: fixed;
+        top: 46%;
+        left: 42%;
+        transform: translate(-50%, -50%);
         background-color: transparent;
         height: 15%;
-        width: 50%;
+
         font-size: 40px;
+        font-weight: bold;
         border: none;
-        border: 1px solid rgb(178, 228, 231);
-        border-radius: 70px;
         cursor: pointer;
-        box-shadow: 7px 7px 14px #aecada, -7px -7px 14px #e2ffff;
+      }
+      a {
+        text-decoration: none;
+
+        background-image: linear-gradient(
+          45deg,
+          rgb(20, 23, 223),
+          rgb(20, 223, 20),
+          #f51454
+        );
+        background-size: 100%;
+        -webkit-background-clip: text;
+        -moz-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        -moz-text-fill-color: transparent;
+        background-clip: none;
+      }
+      a:hover {
+        font-size: 50px;
       }
     </style>
   </head>
   <body>
+    <h1 class="heading">Do You Know Your State Well?</h1>
+
     <div class="container">
-      <img src="../assets/IN-EPS-01-0005.jpg" class="IndiaMap" />
+      <img src="/assets/IN-EPS-01-0005.jpg" class="image" />
       <div class="startingBox">
-        <h1>DO YOU KNOW YOUR STATE WELL ?</h1>
-        <button class="startButton">
-          <a href="/question1" style="text-decoration: none;">Start Quiz</a>
+        <button class="startButton pulse">
+          <a href="/question1">Start Quiz</a>
         </button>
       </div>
     </div>
-    <script type="text/javascript" src="/script.js"></script>
   </body>
 </html>

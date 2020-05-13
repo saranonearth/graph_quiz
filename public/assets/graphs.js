@@ -22,11 +22,13 @@ const nextQuestion = async () => {
 //Function to show the result to the user
 const showResult = (res) => {
   if (res.data.okay) {
-    document.getElementById("result").innerHTML = res.data.message;
+    document.getElementById(
+      "result"
+    ).innerHTML = `<p style="font-weight:bold; color:green;">${res.data.message}</p>`;
   } else {
     document.getElementById(
       "result"
-    ).innerHTML = `${res.data.message}. The correct answer is ${res.data.correct}`;
+    ).innerHTML = `<p style="font-weight:bold; color:red;">${res.data.message}. The correct answer is ${res.data.correct}</p>`;
   }
   setTimeout(nextQuestion, 2000);
 };
@@ -74,13 +76,16 @@ const chartClicked = async (event) => {
   showResult(res);
 };
 
+document.getElementById(
+  "questionNumber"
+).innerHTML = `Q.${questionNumber}  :  What is the budget for XYZ in 2020 for your state?`;
 const canvasRef = document.getElementById("myChart");
 let ctx = canvasRef.getContext("2d");
 
 let myChart = new Chart(ctx, {
   type: "line",
   data: {
-    labels: [2016, 2017, 2018, 2019, 2020, 2021],
+    labels: [2016, 2017, 2018, 2019, 2020, ""],
     datasets: [
       {
         label: "Budget",
@@ -88,12 +93,19 @@ let myChart = new Chart(ctx, {
         data: graphValues[questionNumber - 1],
         backgroundColor: "transparent",
         borderColor: "blue",
-        borderWidth: 2,
-        pointHitRadius: 25,
+        borderWidth: 4,
+        pointHitRadius: 10,
+        pointBackgroundColor: "white",
+        pointBorderColor: "#55bae7",
+        pointHoverBackgroundColor: "white",
+        pointHoverBorderColor: "#55bae7",
       },
     ],
   },
   options: {
+    responsive: true,
+    maintainAspectRatio: false,
+
     dragData: true,
     dragX: true,
     dragDataRound: -1,
@@ -114,23 +126,40 @@ let myChart = new Chart(ctx, {
     elements: {
       line: {
         tension: 0,
+        spanGaps: true,
       },
     },
     scales: {
       yAxes: [
         {
+          scaleLabel: {
+            display: true,
+            labelString: "Budget (in Crore)",
+            fontColor: "Black",
+            fontSize: 20,
+          },
           ticks: {
             beginAtZero: true,
+            max: 250,
+            fontColor: "black",
           },
           gridLines: {
             zeroLineColor: "rgba(38,38,38,1)",
           },
+          label: "Budget (in Crore)",
         },
       ],
       xAxes: [
         {
+          scaleLabel: {
+            display: true,
+            labelString: "Year",
+            fontColor: "Black",
+            fontSize: 20,
+          },
           ticks: {
             beginAtZero: true,
+            fontColor: "black",
           },
           gridLines: {
             zeroLineColor: "rgba(38,38,38,1)",

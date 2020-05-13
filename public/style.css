@@ -1,7 +1,21 @@
 body {
-  background: #e3ecf1;
   text-align: center;
+  background: -webkit-linear-gradient(
+    left,
+    black 0%,
+    black 5%,
+    #ddeff3 5%,
+    #ddeff3 95%,
+    black 95%,
+    black 100%
+  );
+  font-family: "Poppins", sans-serif;
 }
-a {
-  text-decoration: none;
+.canvas-container {
+  background-color: #cae1e7;
+  width: 80%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
