@@ -2,22 +2,29 @@
   <head>
     <% include ('../partials/head') %>
     <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <header>
       <% include ('../partials/header') %>
     </header>
     <main>
-      <p>YOUR QUESTION</p>
+      <h1 id="questionNumber"></h1>
+      <div class="canvas-container">
       <canvas
+      style="width: 50px; height: 500px;"
       id="myChart"
       onclick="chartClicked(event)"
-      style="width: 10%; height: 5%; border: 1px solid black;"
+     
       ></canvas>
-      <div id="result"></div>
+    </div>
+      <div id="result"> <p style="color: rgb(150, 150, 150);">Instructions : Drag the Last coordinate (2020 coordinate) to input your answer</p></div>
     </main>
     <footer>
-      <% include ('../partials/footer') %>
+     
     </footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
   <script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js></script>

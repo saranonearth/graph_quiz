@@ -19,10 +19,6 @@ let ans = [];
 
 let correctAns = [150, 80];
 
-app.get("/", (req, res) => {
-  res.render("pages/homepage.ejs");
-});
-
 app.get("/check", (req, res) => {
   const { level, value } = req.query;
   console.log(level);
