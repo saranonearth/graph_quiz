@@ -1,5 +1,10 @@
 console.log("charts here");
 
+let clicked = false;
+let answerColor = "yellow";
+
+let userAnswer;
+
 //Getting the question number from pathname
 let questionNumber = window.location.pathname;
 questionNumber = parseInt(questionNumber[questionNumber.length - 1]);
@@ -18,7 +23,7 @@ let labels = [
 ];
 
 //Function to go to the next question or submit the data
-const nextQuestion = async () => {
+const nextQuestion = async (event) => {
   if (questionNumber === 2) {
     const res = await axios.post("/submit");
     console.log(res.data);
@@ -34,12 +39,17 @@ const showResult = (res) => {
     document.getElementById(
       "result"
     ).innerHTML = `<p style="font-weight:bold; color:green;">${res.data.message}</p>`;
+    answerColor = "green";
   } else {
     document.getElementById(
       "result"
     ).innerHTML = `<p style="font-weight:bold; color:red;">${res.data.message}. The correct answer is ${res.data.correct}</p>`;
+    answerColor = "red";
   }
-  setTimeout(nextQuestion, 2000);
+  myChart.data.datasets[0].borderColor = answerColor;
+  myChart.data.datasets[0].pointBackgroundColor = answerColor;
+  myChart.update();
+  document.getElementById("next-btn").style.display = "inline-flex";
 };
 
 //Dataset matrix
@@ -50,41 +60,44 @@ const graphValues = [
 
 //Function to re-render chart based on click
 const chartClicked = async (event) => {
-  clicked = true;
+  if (!clicked) {
+    let yTop = myChart.chartArea.top;
+    let yBottom = myChart.chartArea.bottom;
 
-  let yTop = myChart.chartArea.top;
-  let yBottom = myChart.chartArea.bottom;
+    let yMin = myChart.scales["y-axis-0"].min;
+    let yMax = myChart.scales["y-axis-0"].max;
 
-  let yMin = myChart.scales["y-axis-0"].min;
-  let yMax = myChart.scales["y-axis-0"].max;
+    if (event.offsetY <= yBottom && event.offsetY >= yTop) {
+      newY = Math.abs((event.offsetY - yTop) / (yBottom - yTop));
+      newY = (newY - 1) * -1;
+      newY = newY * Math.abs(yMax - yMin) + yMin;
+    }
 
-  if (event.offsetY <= yBottom && event.offsetY >= yTop) {
-    newY = Math.abs((event.offsetY - yTop) / (yBottom - yTop));
-    newY = (newY - 1) * -1;
-    newY = newY * Math.abs(yMax - yMin) + yMin;
+    let xTop = myChart.chartArea.left;
+    let xBottom = myChart.chartArea.right;
+    let xMin = myChart.scales["x-axis-0"].min;
+    let xMax = myChart.scales["x-axis-0"].max;
+
+    if (event.offsetX <= xBottom && event.offsetX >= xTop) {
+      newX = Math.abs((event.offsetX - xTop) / (xBottom - xTop));
+      newX = newX * Math.abs(xMax - xMin) + xMin;
+    }
+
+    const selectedVal = Math.ceil(newY / 10) * 10;
+    myChart.data.datasets[0].data.pop();
+    myChart.data.datasets[0].data.push(selectedVal);
+    console.log(labels);
+
+    myChart.update();
+    const res = await axios.get("/check", {
+      params: { level: questionNumber, value: selectedVal },
+    });
+    console.log(res.data);
+    clicked = true;
+    showResult(res);
+  } else {
+    alert("You cannot change your answer");
   }
-
-  let xTop = myChart.chartArea.left;
-  let xBottom = myChart.chartArea.right;
-  let xMin = myChart.scales["x-axis-0"].min;
-  let xMax = myChart.scales["x-axis-0"].max;
-
-  if (event.offsetX <= xBottom && event.offsetX >= xTop) {
-    newX = Math.abs((event.offsetX - xTop) / (xBottom - xTop));
-    newX = newX * Math.abs(xMax - xMin) + xMin;
-  }
-
-  const selectedVal = Math.ceil(newY / 10) * 10;
-  myChart.data.datasets[0].data.pop();
-  myChart.data.datasets[0].data.push(selectedVal);
-  console.log(labels);
-
-  myChart.update();
-  const res = await axios.get("/check", {
-    params: { level: questionNumber, value: selectedVal },
-  });
-  console.log(res.data);
-  showResult(res);
 };
 
 document.getElementById(
@@ -92,11 +105,11 @@ document.getElementById(
 ).innerHTML = `Q.${questionNumber}  :  What is the budget for XYZ in 2020 for your state?`;
 const canvasRef = document.getElementById("myChart");
 let ctx = canvasRef.getContext("2d");
-var gradient = null;
-var width = null;
-var height = null;
+let gradient = null;
+let width = null;
+let height = null;
 
-var gradientStroke = ctx.createLinearGradient(1585, 0, 100, 0);
+let gradientStroke = ctx.createLinearGradient(1585, 0, 100, 0);
 gradientStroke.addColorStop(0, "#ff471a");
 gradientStroke.addColorStop(0.5, "#ff471a");
 gradientStroke.addColorStop(0.5, "#fcbf1e");
@@ -110,9 +123,9 @@ Chart.controllers.line = Chart.controllers.line.extend({
     ctx.stroke = function () {
       ctx.save();
       ctx.shadowColor = "#394052";
-      ctx.shadowBlur = 8;
-      ctx.shadowOffsetX = 10;
-      ctx.shadowOffsetY = 10;
+      ctx.shadowBlur = 6;
+      ctx.shadowOffsetX = 6;
+      ctx.shadowOffsetY = 3;
       _stroke.apply(this, arguments);
       ctx.restore();
     };
@@ -129,40 +142,7 @@ let myChart = new Chart(ctx, {
         //Using question number as index to use from dataset matrix
         data: graphValues[questionNumber - 1],
         backgroundColor: "transparent",
-        borderColor: function (myChart) {
-          var chartArea = myChart.chart.chartArea;
-          if (!chartArea) {
-            // This case happens on initial chart load
-            return null;
-          }
-          var chartWidth = chartArea.right - chartArea.left;
-          var chartHeight = chartArea.bottom - chartArea.top;
-
-          if (
-            gradient === null ||
-            width !== chartWidth ||
-            height !== chartHeight
-          ) {
-            // Create the gradient because this is either the first render
-            // or the size of the chart has changed
-            width = chartWidth;
-            height = chartHeight;
-            var ctx = myChart.chart.ctx;
-            gradient = ctx.createLinearGradient(
-              chartArea.left,
-              0,
-              chartArea.right,
-              0
-            );
-
-            gradient.addColorStop(0, "yellow");
-            gradient.addColorStop(0.67, "yellow");
-            gradient.addColorStop(0.67, "red");
-            gradient.addColorStop(1, "red");
-          }
-
-          return gradient;
-        },
+        borderColor: `${answerColor}`,
         borderWidth: 4,
         pointRadius: 5,
         pointHoverRadius: 7,
@@ -181,18 +161,32 @@ let myChart = new Chart(ctx, {
     dragX: true,
     dragDataRound: -1,
     onDragStart: (e) => {
-      console.log(e);
+      if (!clicked) {
+        console.log(e);
+      } else {
+        alert("You cannot change your answer");
+      }
     },
     onDrag: (e, datasetIndex, index, value) => {
-      e.target.style.cursor = "grabbing";
+      if (!clicked) {
+        e.target.style.cursor = "grabbing";
+      } else {
+      }
     },
     //Function to check if answer is correct or incorrect when user stops the drag
     onDragEnd: async (e, datasetIndex, index, value) => {
       e.target.style.cursor = "default";
-      const res = await axios.get("/check", {
-        params: { level: questionNumber, value },
-      });
-      showResult(res);
+      if (!clicked) {
+        const res = await axios.get("/check", {
+          params: { level: questionNumber, value },
+        });
+        userAnswer = value;
+        clicked = true;
+        showResult(res);
+      } else {
+        alert("You cannot change your answer");
+        myChart.data.datasets[0].data[5] = value;
+      }
     },
 
     elements: {

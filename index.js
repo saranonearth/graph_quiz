@@ -29,6 +29,7 @@ app.get("/check", (req, res) => {
     res.json({
       okay: true,
       message: "Correct Answer",
+      correct: value,
     });
   } else {
     res.json({
