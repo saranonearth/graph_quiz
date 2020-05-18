@@ -7,6 +7,15 @@ console.log(questionNumber);
 
 let newY = 0;
 let newX = 0;
+let labels = [
+  "2014-15",
+  "2015-16",
+  "2016-17",
+  "2017-18",
+  "2018-19",
+  "2019-20",
+  "",
+];
 
 //Function to go to the next question or submit the data
 const nextQuestion = async () => {
@@ -35,8 +44,8 @@ const showResult = (res) => {
 
 //Dataset matrix
 const graphValues = [
-  [200, 100, 125, 80, 80],
-  [150, 80, 55, 100, 100],
+  [289, 306, 332, 361, 384, 384],
+  [289, 306, 332, 361, 384, 384],
 ];
 
 //Function to re-render chart based on click
@@ -68,6 +77,8 @@ const chartClicked = async (event) => {
   const selectedVal = Math.ceil(newY / 10) * 10;
   myChart.data.datasets[0].data.pop();
   myChart.data.datasets[0].data.push(selectedVal);
+  console.log(labels);
+
   myChart.update();
   const res = await axios.get("/check", {
     params: { level: questionNumber, value: selectedVal },
@@ -81,24 +92,84 @@ document.getElementById(
 ).innerHTML = `Q.${questionNumber}  :  What is the budget for XYZ in 2020 for your state?`;
 const canvasRef = document.getElementById("myChart");
 let ctx = canvasRef.getContext("2d");
+var gradient = null;
+var width = null;
+var height = null;
+
+var gradientStroke = ctx.createLinearGradient(1585, 0, 100, 0);
+gradientStroke.addColorStop(0, "#ff471a");
+gradientStroke.addColorStop(0.5, "#ff471a");
+gradientStroke.addColorStop(0.5, "#fcbf1e");
+gradientStroke.addColorStop(1, "#fcbf1e");
+let draw = Chart.controllers.line.prototype.draw;
+Chart.controllers.line = Chart.controllers.line.extend({
+  draw: function () {
+    draw.apply(this, arguments);
+    let ctx = this.chart.chart.ctx;
+    let _stroke = ctx.stroke;
+    ctx.stroke = function () {
+      ctx.save();
+      ctx.shadowColor = "#394052";
+      ctx.shadowBlur = 8;
+      ctx.shadowOffsetX = 10;
+      ctx.shadowOffsetY = 10;
+      _stroke.apply(this, arguments);
+      ctx.restore();
+    };
+  },
+});
 
 let myChart = new Chart(ctx, {
   type: "line",
   data: {
-    labels: [2016, 2017, 2018, 2019, 2020, ""],
+    labels: labels,
     datasets: [
       {
         label: "Budget",
         //Using question number as index to use from dataset matrix
         data: graphValues[questionNumber - 1],
         backgroundColor: "transparent",
-        borderColor: "blue",
+        borderColor: function (myChart) {
+          var chartArea = myChart.chart.chartArea;
+          if (!chartArea) {
+            // This case happens on initial chart load
+            return null;
+          }
+          var chartWidth = chartArea.right - chartArea.left;
+          var chartHeight = chartArea.bottom - chartArea.top;
+
+          if (
+            gradient === null ||
+            width !== chartWidth ||
+            height !== chartHeight
+          ) {
+            // Create the gradient because this is either the first render
+            // or the size of the chart has changed
+            width = chartWidth;
+            height = chartHeight;
+            var ctx = myChart.chart.ctx;
+            gradient = ctx.createLinearGradient(
+              chartArea.left,
+              0,
+              chartArea.right,
+              0
+            );
+
+            gradient.addColorStop(0, "yellow");
+            gradient.addColorStop(0.67, "yellow");
+            gradient.addColorStop(0.67, "red");
+            gradient.addColorStop(1, "red");
+          }
+
+          return gradient;
+        },
         borderWidth: 4,
-        pointHitRadius: 10,
-        pointBackgroundColor: "white",
-        pointBorderColor: "#55bae7",
-        pointHoverBackgroundColor: "white",
-        pointHoverBorderColor: "#55bae7",
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        pointBackgroundColor: "yellow",
+        pointBorderColor: gradientStroke,
+        pointHoverBackgroundColor: "blue",
+        pointHoverBorderColor: gradientStroke,
       },
     ],
   },
@@ -123,6 +194,7 @@ let myChart = new Chart(ctx, {
       });
       showResult(res);
     },
+
     elements: {
       line: {
         tension: 0,
@@ -134,19 +206,25 @@ let myChart = new Chart(ctx, {
         {
           scaleLabel: {
             display: true,
-            labelString: "Budget (in Crore)",
-            fontColor: "Black",
+            labelString: "Budget (in Lakh)",
+            fontColor: "black",
             fontSize: 20,
+            color: "black",
           },
           ticks: {
             beginAtZero: true,
-            max: 250,
+            max: 500,
+            min: 200,
             fontColor: "black",
+            color: "black",
           },
           gridLines: {
-            zeroLineColor: "rgba(38,38,38,1)",
+            zeroLineColor: "black",
+            display: true,
+            fontColor: "black",
+            color: "black",
           },
-          label: "Budget (in Crore)",
+          label: "Budget (in Lakh)",
         },
       ],
       xAxes: [
@@ -154,15 +232,19 @@ let myChart = new Chart(ctx, {
           scaleLabel: {
             display: true,
             labelString: "Year",
-            fontColor: "Black",
+            fontColor: "black",
             fontSize: 20,
+            color: "black",
           },
           ticks: {
-            beginAtZero: true,
+            beginAtZero: false,
             fontColor: "black",
           },
           gridLines: {
-            zeroLineColor: "rgba(38,38,38,1)",
+            zeroLineColor: "black",
+            display: true,
+            fontColor: "black",
+            color: "black",
           },
         },
       ],

@@ -1,21 +1,30 @@
 body {
   text-align: center;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont;
   background: -webkit-linear-gradient(
     left,
     black 0%,
-    black 5%,
-    #ddeff3 5%,
-    #ddeff3 95%,
-    black 95%,
+    black 3%,
+    #ffffff 3%,
+    #ffffff 97%,
+    black 97%,
     black 100%
   );
-  font-family: "Poppins", sans-serif;
 }
 .canvas-container {
-  background-color: #cae1e7;
+  /* background-image: url("./assets/backgraph.png"); */
+  /* background-image: linear-gradient(to right, #40bad5, #035aa6);
+  background-repeat: no-repeat;
+  background-position: center; */
+  background-size: cover;
   width: 80%;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+@font-face {
+  font-family: "San Francisco";
+  font-weight: 400;
+  src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
 }
