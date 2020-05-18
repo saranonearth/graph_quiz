@@ -17,7 +17,7 @@ app.use("/", questionsRouter);
 
 let ans = [];
 
-let correctAns = [150, 80];
+let correctAns = [295, 295];
 
 app.get("/check", (req, res) => {
   const { level, value } = req.query;
