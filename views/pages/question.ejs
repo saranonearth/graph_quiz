@@ -1,5 +1,6 @@
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
     <% include ('../partials/head') %>
     <link rel="stylesheet" href="style.css" />
     <link
@@ -13,19 +14,15 @@
     </header>
     <main>
       <h1 id="questionNumber" style="color: black;"></h1>
-      <div class="canvas-container">
-      <canvas
-      style="width: 50px; height: 500px;"
-      id="myChart"
-      onclick="chartClicked(event)"
-     
-      ></canvas>
-    </div>
+      
       <div id="result"> <p style="color: rgb(80, 80, 80);">Instructions : Drag the Last coordinate (2020 coordinate) up or down to what you think is the correct answer</p></div>
+      <div class="canvas-container">
+        <canvas id="myChart" onclick="chartClicked(event)"></canvas>
+      </div>  
     </main>
-    <button id="next-btn" onclick="nextQuestion(event)">Next Question</button>
+    
     <footer>
-     
+      <button id="next-btn" onclick="nextQuestion(event)"><span> Next Question </span></button>
     </footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
   <script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js></script>
