@@ -1,6 +1,10 @@
 <html>
   <head>
     <title>STATE QUIZ</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, minimum-scale=1"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
       rel="stylesheet"
@@ -27,30 +31,7 @@
         font-weight: 400;
         src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
       }
-      .image {
-        width: 80%;
-        margin: -60px 0 0 -60px;
-        -webkit-animation: spin 70s linear infinite;
-        -moz-animation: spin 70s linear infinite;
-        animation: spin 70s linear infinite;
-        border-radius: 50%;
-      }
-      @-moz-keyframes spin {
-        100% {
-          -moz-transform: rotate(360deg);
-        }
-      }
-      @-webkit-keyframes spin {
-        100% {
-          -webkit-transform: rotate(360deg);
-        }
-      }
-      @keyframes spin {
-        100% {
-          -webkit-transform: rotate(360deg);
-          transform: rotate(360deg);
-        }
-      }
+
       .container {
         display: flex;
         position: fixed;
@@ -62,6 +43,7 @@
       .heading {
         font-family: -apple-system, system-ui, BlinkMacSystemFont;
         color: black;
+        z-index: 1;
       }
 
       .startButton {
@@ -99,13 +81,26 @@
         font-size: 45px;
         text-decoration: black;
       }
+      @media (max-width: 640px) {
+        .startButton {
+          border: none;
+          width: 150px;
+          height: 50px;
+          padding: 0;
+          font-size: 30px;
+          left: 47%;
+          top: 39%;
+        }
+
+        .container {
+          left: 50%;
+        }
+      }
     </style>
   </head>
   <body>
     <h1 class="heading">Do You Know Your State Well?</h1>
-
     <div class="container">
-      <img src="/assets/IN-EPS-01-0005.jpg" class="image" />
       <div class="startingBox">
         <button class="startButton pulse">
           <a href="/question1">Start Quiz</a>

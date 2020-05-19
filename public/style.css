@@ -16,12 +16,16 @@ body {
   /* background-image: linear-gradient(to right, #40bad5, #035aa6);
   background-repeat: no-repeat;
   background-position: center; */
-  background-size: cover;
+  height: 500px;
   width: 80%;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+#myChart {
+  width: 50px;
+  height: 500px;
 }
 @font-face {
   font-family: "San Francisco";
@@ -30,5 +34,65 @@ body {
 }
 
 #next-btn {
+  width: 10%;
+  height: 5%;
   display: none;
+  position: absolute;
+  text-align: center;
+  padding: 5px 10px;
+  margin-left: -3%;
+  bottom: 8%;
+  background-color: #2dcc70;
+  border-radius: 5px;
+  color: #ffffff;
+  border: none;
+  font-size: 120%;
+  cursor: pointer;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont;
+  transition: all 0.5s;
+}
+
+#next-btn span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+#next-btn span:after {
+  content: "\00bb";
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+#next-btn:hover span {
+  padding-right: 25px;
+}
+
+#next-btn:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: 11px;
+  }
+  .canvas-container {
+    height: auto;
+    overflow: scroll;
+    top: 50%;
+    left: 48%;
+  }
+  #myChart {
+    height: 50px;
+    width: 500px;
+  }
+  #next-btn {
+    margin-left: -8%;
+    width: 30%;
+  }
 }

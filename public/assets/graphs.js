@@ -38,18 +38,20 @@ const showResult = (res) => {
   if (res.data.okay) {
     document.getElementById(
       "result"
-    ).innerHTML = `<p style="font-weight:bold; color:green;">${res.data.message}</p>`;
+    ).innerHTML = `<p style="font-weight:bold; color:green; font-size:25px;">${res.data.message}</p>`;
     answerColor = "green";
   } else {
     document.getElementById(
       "result"
-    ).innerHTML = `<p style="font-weight:bold; color:red;">${res.data.message}. The correct answer is ${res.data.correct}</p>`;
+    ).innerHTML = `<p style="font-weight:bold; color:red; font-size:25px;">${res.data.message}. The correct answer is ${res.data.correct}</p>`;
     answerColor = "red";
   }
   myChart.data.datasets[0].borderColor = answerColor;
   myChart.data.datasets[0].pointBackgroundColor = answerColor;
+  myChart.data.datasets[0].data[5] = res.data.correct;
+
   myChart.update();
-  document.getElementById("next-btn").style.display = "inline-flex";
+  document.getElementById("next-btn").style.display = "inline-block";
 };
 
 //Dataset matrix
@@ -109,26 +111,71 @@ let gradient = null;
 let width = null;
 let height = null;
 
-let gradientStroke = ctx.createLinearGradient(1585, 0, 100, 0);
-gradientStroke.addColorStop(0, "#ff471a");
-gradientStroke.addColorStop(0.5, "#ff471a");
-gradientStroke.addColorStop(0.5, "#fcbf1e");
-gradientStroke.addColorStop(1, "#fcbf1e");
 let draw = Chart.controllers.line.prototype.draw;
-Chart.controllers.line = Chart.controllers.line.extend({
-  draw: function () {
-    draw.apply(this, arguments);
-    let ctx = this.chart.chart.ctx;
-    let _stroke = ctx.stroke;
-    ctx.stroke = function () {
-      ctx.save();
-      ctx.shadowColor = "#394052";
-      ctx.shadowBlur = 6;
-      ctx.shadowOffsetX = 6;
-      ctx.shadowOffsetY = 3;
-      _stroke.apply(this, arguments);
-      ctx.restore();
-    };
+Chart.controllers.line.prototype.draw = function () {
+  draw.apply(this, arguments);
+  let ctx = this.chart.chart.ctx;
+  let _stroke = ctx.stroke;
+  ctx.stroke = function () {
+    ctx.save();
+    ctx.shadowColor = "black";
+    ctx.shadowBlur = 10;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 4;
+    _stroke.apply(this, arguments);
+    ctx.restore();
+  };
+};
+Chart.pluginService.register({
+  beforeRender: function (chart) {
+    if (chart.config.options.showAllTooltips) {
+      // create an array of tooltips
+      // we can't use the chart tooltip because there is only one tooltip per chart
+      chart.pluginTooltips = [];
+      chart.config.data.datasets.forEach(function (dataset, i) {
+        chart.getDatasetMeta(i).data.forEach(function (sector, j) {
+          {
+            chart.pluginTooltips.push(
+              new Chart.Tooltip(
+                {
+                  _chart: chart.chart,
+                  _chartInstance: chart,
+                  _data: chart.data,
+                  _options: chart.options.tooltips,
+                  _active: [sector],
+                },
+                chart
+              )
+            );
+          }
+        });
+      });
+
+      // turn off normal tooltips
+      chart.options.tooltips.enabled = false;
+    }
+  },
+  afterDraw: function (chart, easing) {
+    if (chart.width < 640) {
+    }
+    if (chart.config.options.showAllTooltips) {
+      // we don't want the permanent tooltips to animate, so don't do anything till the animation runs atleast once
+      if (!chart.allTooltipsOnce) {
+        if (easing !== 1) return;
+        chart.allTooltipsOnce = true;
+      }
+
+      // turn on tooltips
+      chart.options.tooltips.enabled = true;
+      Chart.helpers.each(chart.pluginTooltips, function (tooltip) {
+        tooltip.initialize();
+        tooltip.update();
+        // we don't actually need this since we are not animating tooltips
+        tooltip.pivot();
+        tooltip.transition(easing).draw();
+      });
+      chart.options.tooltips.enabled = false;
+    }
   },
 });
 
@@ -138,28 +185,99 @@ let myChart = new Chart(ctx, {
     labels: labels,
     datasets: [
       {
-        label: "Budget",
         //Using question number as index to use from dataset matrix
         data: graphValues[questionNumber - 1],
         backgroundColor: "transparent",
-        borderColor: `${answerColor}`,
-        borderWidth: 4,
-        pointRadius: 5,
-        pointHoverRadius: 7,
+        borderColor: function (myChart) {
+          var chartArea = myChart.chart.chartArea;
+          if (!chartArea) {
+            // This case happens on initial chart load
+            return null;
+          }
+          var chartWidth = chartArea.right - chartArea.left;
+          var chartHeight = chartArea.bottom - chartArea.top;
+
+          if (
+            gradient === null ||
+            width !== chartWidth ||
+            height !== chartHeight
+          ) {
+            // Create the gradient because this is either the first render
+            // or the size of the chart has changed
+
+            width = chartWidth;
+            height = chartHeight;
+            var ctx = myChart.chart.ctx;
+            gradient = ctx.createLinearGradient(
+              chartArea.left,
+              0,
+              chartArea.right,
+              0
+            );
+
+            gradient.addColorStop(0, "yellow");
+            gradient.addColorStop(0.67, "yellow");
+            gradient.addColorStop(0.67, "blue");
+            gradient.addColorStop(1, "blue");
+          }
+
+          return gradient;
+        },
+        pointRadius: 2,
+        pointHoverRadius: 4,
+        fill: false,
+        tension: 0.05,
+        borderWidth: 6,
+
         pointBackgroundColor: "yellow",
-        pointBorderColor: gradientStroke,
-        pointHoverBackgroundColor: "blue",
-        pointHoverBorderColor: gradientStroke,
+        pointBorderColor: "#FADA5E",
+        pointHoverBackgroundColor: "#07C",
+        pointHoverBorderColor: "#FFF",
       },
     ],
   },
   options: {
+    legend: {
+      display: false,
+    },
+    showAllTooltips: true,
+    tooltips: {
+      xPadding: 2,
+      yPadding: 1,
+      displayColors: false,
+      bodyFontSize: 10,
+
+      yAlign: "bottom",
+      cornerRadius: 4,
+      callbacks: {
+        labelColor: function (tooltipItem, chart) {
+          return null;
+        },
+      },
+      backgroundColor: "#227799",
+
+      callbacks: {
+        // use label callback to return the desired label
+        label: function (tooltipItem) {
+          return "lakh";
+        },
+        // remove title
+        title: function (tooltipItem, data) {
+          return tooltipItem[0].yLabel;
+        },
+      },
+    },
+
     responsive: true,
     maintainAspectRatio: false,
 
     dragData: true,
     dragX: true,
     dragDataRound: -1,
+    dragOptions: {
+      showTooltip: true,
+    },
+
     onDragStart: (e) => {
       if (!clicked) {
         console.log(e);
@@ -202,7 +320,7 @@ let myChart = new Chart(ctx, {
             display: true,
             labelString: "Budget (in Lakh)",
             fontColor: "black",
-            fontSize: 20,
+            fontSize: 10,
             color: "black",
           },
           ticks: {
@@ -213,10 +331,10 @@ let myChart = new Chart(ctx, {
             color: "black",
           },
           gridLines: {
+            drawBorder: false,
             zeroLineColor: "black",
             display: true,
             fontColor: "black",
-            color: "black",
           },
           label: "Budget (in Lakh)",
         },
@@ -236,9 +354,8 @@ let myChart = new Chart(ctx, {
           },
           gridLines: {
             zeroLineColor: "black",
-            display: true,
+            display: false,
             fontColor: "black",
-            color: "black",
           },
         },
       ],
