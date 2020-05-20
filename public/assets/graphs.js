@@ -38,17 +38,17 @@ const showResult = (res) => {
   if (res.data.okay) {
     document.getElementById(
       "result"
-    ).innerHTML = `<p style="font-weight:bold; color:green; font-size:25px;">${res.data.message}</p>`;
+    ).innerHTML = `<p style="font-weight:bold; color:green; font-size:20px;">${res.data.message}</p>`;
     answerColor = "green";
   } else {
     document.getElementById(
       "result"
-    ).innerHTML = `<p style="font-weight:bold; color:red; font-size:25px;">${res.data.message}. The correct answer is ${res.data.correct}</p>`;
+    ).innerHTML = `<p style="font-weight:bold; color:red; font-size:20px;">${res.data.message}. The correct answer is ${res.data.correct}</p>`;
     answerColor = "red";
   }
-  myChart.data.datasets[0].borderColor = answerColor;
-  myChart.data.datasets[0].pointBackgroundColor = answerColor;
-  myChart.data.datasets[0].data[5] = res.data.correct;
+  myChart.data.datasets[1].borderColor = answerColor;
+  myChart.data.datasets[1].pointBackgroundColor = answerColor;
+  myChart.data.datasets[2].data[5] = res.data.correct;
 
   myChart.update();
   document.getElementById("next-btn").style.display = "inline-block";
@@ -86,8 +86,8 @@ const chartClicked = async (event) => {
     }
 
     const selectedVal = Math.ceil(newY / 10) * 10;
-    myChart.data.datasets[0].data.pop();
-    myChart.data.datasets[0].data.push(selectedVal);
+    myChart.data.datasets[1].data.pop();
+    myChart.data.datasets[1].data.push(selectedVal);
     console.log(labels);
 
     myChart.update();
@@ -118,10 +118,10 @@ Chart.controllers.line.prototype.draw = function () {
   let _stroke = ctx.stroke;
   ctx.stroke = function () {
     ctx.save();
-    ctx.shadowColor = "black";
-    ctx.shadowBlur = 10;
+    ctx.shadowColor = "#ccc";
+    ctx.shadowBlur = 8;
     ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 4;
+    ctx.shadowOffsetY = 0;
     _stroke.apply(this, arguments);
     ctx.restore();
   };
@@ -186,7 +186,27 @@ let myChart = new Chart(ctx, {
     datasets: [
       {
         //Using question number as index to use from dataset matrix
+        data: [289, 306, 332, 361, 384],
+
+        backgroundColor: "transparent",
+        borderColor: "yellow",
+        pointRadius: 1,
+        pointHoverRadius: 4,
+        pointHitRadius: 25,
+        fill: false,
+        tension: 0,
+        borderWidth: 6,
+
+        pointBackgroundColor: "yellow",
+        pointBorderColor: "#FADA5E",
+        pointHoverBackgroundColor: "#07C",
+        pointHoverBorderColor: "#FFF",
+      },
+
+      {
+        //Using question number as index to use from dataset matrix
         data: graphValues[questionNumber - 1],
+
         backgroundColor: "transparent",
         borderColor: function (myChart) {
           var chartArea = myChart.chart.chartArea;
@@ -217,20 +237,39 @@ let myChart = new Chart(ctx, {
 
             gradient.addColorStop(0, "yellow");
             gradient.addColorStop(0.67, "yellow");
-            gradient.addColorStop(0.67, "blue");
-            gradient.addColorStop(1, "blue");
+            gradient.addColorStop(0.67, "red");
+            gradient.addColorStop(1, "red");
           }
 
           return gradient;
         },
         pointRadius: 2,
         pointHoverRadius: 4,
+        pointHitRadius: 25,
         fill: false,
-        tension: 0.05,
+        tension: 0,
         borderWidth: 6,
 
         pointBackgroundColor: "yellow",
         pointBorderColor: "#FADA5E",
+        pointHoverBackgroundColor: "#07C",
+        pointHoverBorderColor: "#FFF",
+      },
+      {
+        //Using question number as index to use from dataset matrix
+        data: [289, 306, 332, 361, 384],
+
+        backgroundColor: "transparent",
+        borderColor: "blue",
+        pointRadius: 2,
+        pointHoverRadius: 3,
+        pointHitRadius: 25,
+        fill: false,
+        tension: 0,
+        borderWidth: 6,
+
+        pointBackgroundColor: "#FFFFFF",
+        pointBorderColor: "#FFFFFF",
         pointHoverBackgroundColor: "#07C",
         pointHoverBorderColor: "#FFF",
       },
@@ -278,11 +317,15 @@ let myChart = new Chart(ctx, {
       showTooltip: true,
     },
 
-    onDragStart: (e) => {
-      if (!clicked) {
-        console.log(e);
+    onDragStart: (e, datasetIndex) => {
+      if (datasetIndex._index === 5) {
+        if (!clicked) {
+          console.log(e);
+        } else {
+          alert("You cannot change your answer");
+        }
       } else {
-        alert("You cannot change your answer");
+        return false;
       }
     },
     onDrag: (e, datasetIndex, index, value) => {
@@ -320,7 +363,7 @@ let myChart = new Chart(ctx, {
             display: true,
             labelString: "Budget (in Lakh)",
             fontColor: "black",
-            fontSize: 10,
+            fontSize: 15,
             color: "black",
           },
           ticks: {
@@ -345,7 +388,7 @@ let myChart = new Chart(ctx, {
             display: true,
             labelString: "Year",
             fontColor: "black",
-            fontSize: 20,
+            fontSize: 15,
             color: "black",
           },
           ticks: {
