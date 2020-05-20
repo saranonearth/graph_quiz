@@ -84,15 +84,15 @@ body {
   .canvas-container {
     height: auto;
     overflow: scroll;
-    top: 50%;
+    top: 55%;
     left: 48%;
   }
   #myChart {
-    height: 50px;
+    height: 100px;
     width: 500px;
   }
   #next-btn {
-    margin-left: -8%;
-    width: 30%;
+    margin-left: -24%;
+    width: 50%;
   }
 }
