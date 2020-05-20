@@ -29,7 +29,7 @@ app.get("/check", (req, res) => {
     res.json({
       okay: true,
       message: "Correct Answer",
-      correct: value,
+      correct: key,
     });
   } else {
     res.json({
