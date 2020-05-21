@@ -88,7 +88,8 @@ const chartClicked = async (event) => {
     const selectedVal = Math.ceil(newY / 10) * 10;
 
     myChart.data.datasets[1].data[5] = selectedVal;
-    console.log(labels);
+    document.getElementById("result").innerHTML =
+      "Please Drag And Drop The Red Marker To Enter Your Response ";
 
     myChart.update();
     // const res = await axios.get("/check", {
@@ -251,10 +252,9 @@ let myChart = new Chart(ctx, {
         tension: 0,
         borderWidth: 6,
 
-        pointBackgroundColor: "yellow",
-        pointBorderColor: "#FADA5E",
-        pointHoverBackgroundColor: "#07C",
-        pointHoverBorderColor: "#FFF",
+        pointBorderColor: "red",
+        pointHoverBackgroundColor: "red",
+        pointHoverBorderColor: "red",
       },
       {
         //Using question number as index to use from dataset matrix
@@ -269,8 +269,8 @@ let myChart = new Chart(ctx, {
         tension: 0,
         borderWidth: 6,
 
-        pointBackgroundColor: "#FFFFFF",
-        pointBorderColor: "#FFFFFF",
+        pointBackgroundColor: "#blue",
+        pointBorderColor: "#blue",
         pointHoverBackgroundColor: "#07C",
         pointHoverBorderColor: "#FFF",
       },
@@ -321,7 +321,8 @@ let myChart = new Chart(ctx, {
     onDragStart: (e, datasetIndex) => {
       if (datasetIndex._index === 5) {
         if (!clicked) {
-          console.log(e);
+          document.getElementById("result").innerHTML =
+            "Release The Point On Your Desired Response";
         } else {
           alert("You cannot change your answer");
         }
