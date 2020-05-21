@@ -38,12 +38,12 @@ const showResult = (res) => {
   if (res.data.okay) {
     document.getElementById(
       "result"
-    ).innerHTML = `<p style="font-weight:bold; color:green; font-size:20px;">${res.data.message}</p>`;
+    ).innerHTML = `<p style="font-weight:bold; color:green; font-size:20px;">The correct answer is ${res.data.correct} Lakh</p>`;
     answerColor = "green";
   } else {
     document.getElementById(
       "result"
-    ).innerHTML = `<p style="font-weight:bold; color:red; font-size:20px;">${res.data.message}. The correct answer is ${res.data.correct}</p>`;
+    ).innerHTML = `<p style="font-weight:bold; color:red; font-size:20px;">The correct answer is ${res.data.correct} Lakh</p>`;
     answerColor = "red";
   }
   myChart.data.datasets[1].borderColor = answerColor;
@@ -56,8 +56,8 @@ const showResult = (res) => {
 
 //Dataset matrix
 const graphValues = [
-  [289, 306, 332, 361, 384, 384],
-  [289, 306, 332, 361, 384, 384],
+  [289, 306, 332, 361, 384],
+  [289, 306, 332, 361, 384],
 ];
 
 //Dataset for the correct answers
@@ -92,25 +92,27 @@ const chartClicked = async (event) => {
     }
 
     const selectedVal = Math.ceil(newY / 10) * 10;
-    myChart.data.datasets[1].data.pop();
-    myChart.data.datasets[1].data.push(selectedVal);
-    console.log(labels);
+
+    myChart.data.datasets[1].data[5] = selectedVal;
+    document.getElementById("result").innerHTML =
+      "Please Drag And Drop The Red Marker To Enter Your Response ";
 
     myChart.update();
-    const res = await axios.get("/check", {
-      params: { level: questionNumber, value: selectedVal },
-    });
-    console.log(res.data);
-    clicked = true;
-    showResult(res);
-  } else {
-    alert("You cannot change your answer");
+    // const res = await axios.get("/check", {
+    //   params: { level: questionNumber, value: selectedVal },
+    // });
+    // console.log(res.data);
+    // clicked = true;
+    // showResult(res);
   }
+  //else {
+  //   alert("You cannot change your answer");
+  // }
 };
 
 document.getElementById(
   "questionNumber"
-).innerHTML = `Q.${questionNumber}  :  What is the budget for XYZ in 2020 for your state?`;
+).innerHTML = `Q.${questionNumber}  :  Guess the Cases of Liquor sold in AP in the year 2019-20?`;
 const canvasRef = document.getElementById("myChart");
 let ctx = canvasRef.getContext("2d");
 let gradient = null;
@@ -256,10 +258,9 @@ let myChart = new Chart(ctx, {
         tension: 0,
         borderWidth: 6,
 
-        pointBackgroundColor: "yellow",
-        pointBorderColor: "#FADA5E",
-        pointHoverBackgroundColor: "#07C",
-        pointHoverBorderColor: "#FFF",
+        pointBorderColor: "red",
+        pointHoverBackgroundColor: "red",
+        pointHoverBorderColor: "red",
       },
       {
         //Using question number as index to use from dataset matrix
@@ -274,8 +275,8 @@ let myChart = new Chart(ctx, {
         tension: 0,
         borderWidth: 6,
 
-        pointBackgroundColor: "#FFFFFF",
-        pointBorderColor: "#FFFFFF",
+        pointBackgroundColor: "#blue",
+        pointBorderColor: "#blue",
         pointHoverBackgroundColor: "#07C",
         pointHoverBorderColor: "#FFF",
       },
@@ -326,10 +327,9 @@ let myChart = new Chart(ctx, {
     onDragStart: (e, datasetIndex) => {
       if (datasetIndex._index === 5) {
         if (!clicked) {
-          console.log(e);
-          document.getElementById(
-            "result"
-          ).innerHTML = `<p style="font-weight:bold; color:green; font-size:20px;">Drag the point up or down to make your selection</p>`;
+          document.getElementById("result").innerHTML =
+            "Release The Point On Your Desired Response";
+
         } else {
           alert("You cannot change your answer");
         }
