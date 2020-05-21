@@ -65,6 +65,10 @@ const correctAnswers = [
   [289, 306, 332, 361, 384],
   [289, 306, 332, 361, 384],
 ];
+const yellowLine = [
+  [289, 306, 332, 361, 384],
+  [289, 306, 332, 361, 384],
+];
 
 //Function to re-render chart based on click
 const chartClicked = async (event) => {
@@ -194,7 +198,7 @@ let myChart = new Chart(ctx, {
     datasets: [
       {
         //Using question number as index to use from dataset matrix
-        data: correctAnswers[questionNumber - 1],
+        data: yellowLine[questionNumber - 1],
 
         backgroundColor: "transparent",
         borderColor: "yellow",
@@ -275,8 +279,8 @@ let myChart = new Chart(ctx, {
         tension: 0,
         borderWidth: 6,
 
-        pointBackgroundColor: "#blue",
-        pointBorderColor: "#blue",
+        pointBackgroundColor: "blue",
+        pointBorderColor: "blue",
         pointHoverBackgroundColor: "#07C",
         pointHoverBorderColor: "#FFF",
       },
@@ -329,7 +333,6 @@ let myChart = new Chart(ctx, {
         if (!clicked) {
           document.getElementById("result").innerHTML =
             "Release The Point On Your Desired Response";
-
         } else {
           alert("You cannot change your answer");
         }
