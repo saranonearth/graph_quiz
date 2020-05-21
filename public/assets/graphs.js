@@ -60,6 +60,12 @@ const graphValues = [
   [289, 306, 332, 361, 384, 384],
 ];
 
+//Dataset for the correct answers
+const correctAnswers = [
+  [289, 306, 332, 361, 384],
+  [289, 306, 332, 361, 384],
+];
+
 //Function to re-render chart based on click
 const chartClicked = async (event) => {
   if (!clicked) {
@@ -186,7 +192,7 @@ let myChart = new Chart(ctx, {
     datasets: [
       {
         //Using question number as index to use from dataset matrix
-        data: [289, 306, 332, 361, 384],
+        data: correctAnswers[questionNumber - 1],
 
         backgroundColor: "transparent",
         borderColor: "yellow",
@@ -257,7 +263,7 @@ let myChart = new Chart(ctx, {
       },
       {
         //Using question number as index to use from dataset matrix
-        data: [289, 306, 332, 361, 384],
+        data: correctAnswers[questionNumber - 1],
 
         backgroundColor: "transparent",
         borderColor: "blue",
@@ -321,6 +327,9 @@ let myChart = new Chart(ctx, {
       if (datasetIndex._index === 5) {
         if (!clicked) {
           console.log(e);
+          document.getElementById(
+            "result"
+          ).innerHTML = `<p style="font-weight:bold; color:green; font-size:20px;">Drag the point up or down to make your selection</p>`;
         } else {
           alert("You cannot change your answer");
         }
