@@ -99,7 +99,7 @@ const chartClicked = async (event) => {
 
     myChart.data.datasets[1].data[5] = selectedVal;
     document.getElementById("result").innerHTML =
-      "Please Drag And Drop The Red Marker To Enter Your Response ";
+      '<p style="color: rgb(20, 42, 105); font-size: large; font-weight: bold;">Please Drag And Drop The Red Marker To Enter Your Response </p>';
 
     myChart.update();
     // const res = await axios.get("/check", {
@@ -331,8 +331,9 @@ let myChart = new Chart(ctx, {
     onDragStart: (e, datasetIndex) => {
       if (datasetIndex._index === 5) {
         if (!clicked) {
-          document.getElementById("result").innerHTML =
-            "Release The Point On Your Desired Response";
+          document.getElementById(
+            "result"
+          ).innerHTML = `<p style="color: rgb(20, 42, 105); font-size: large; font-weight: bold;">Release The Point On Your Desired Response</p>`;
         } else {
           alert("You cannot change your answer");
         }
