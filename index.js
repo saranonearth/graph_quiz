@@ -25,7 +25,7 @@ app.get("/check", (req, res) => {
   ans.push(value);
   const key = correctAns[level - 1];
   console.log(ans);
-  if (value >= key - 5 && value <= key + 5) {
+  if (value === key) {
     res.json({
       okay: true,
       message: "Correct Answer",
