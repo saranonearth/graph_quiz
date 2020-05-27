@@ -2,7 +2,7 @@ console.log("charts here");
 
 let clicked = false;
 let answerColor = "yellow";
-
+let clickedChecker = false;
 let userAnswer;
 
 //Getting the question number from pathname
@@ -72,36 +72,38 @@ const yellowLine = [
 
 //Function to re-render chart based on click
 const chartClicked = async (event) => {
-  if (!clicked) {
-    let yTop = myChart.chartArea.top;
-    let yBottom = myChart.chartArea.bottom;
+  if (!clickedChecker) {
+    if (!clicked) {
+      let yTop = myChart.chartArea.top;
+      let yBottom = myChart.chartArea.bottom;
 
-    let yMin = myChart.scales["y-axis-0"].min;
-    let yMax = myChart.scales["y-axis-0"].max;
+      let yMin = myChart.scales["y-axis-0"].min;
+      let yMax = myChart.scales["y-axis-0"].max;
 
-    if (event.offsetY <= yBottom && event.offsetY >= yTop) {
-      newY = Math.abs((event.offsetY - yTop) / (yBottom - yTop));
-      newY = (newY - 1) * -1;
-      newY = newY * Math.abs(yMax - yMin) + yMin;
+      if (event.offsetY <= yBottom && event.offsetY >= yTop) {
+        newY = Math.abs((event.offsetY - yTop) / (yBottom - yTop));
+        newY = (newY - 1) * -1;
+        newY = newY * Math.abs(yMax - yMin) + yMin;
+      }
+
+      let xTop = myChart.chartArea.left;
+      let xBottom = myChart.chartArea.right;
+      let xMin = myChart.scales["x-axis-0"].min;
+      let xMax = myChart.scales["x-axis-0"].max;
+
+      if (event.offsetX <= xBottom && event.offsetX >= xTop) {
+        newX = Math.abs((event.offsetX - xTop) / (xBottom - xTop));
+        newX = newX * Math.abs(xMax - xMin) + xMin;
+      }
+
+      const selectedVal = newY.toFixed(0);
+
+      myChart.data.datasets[1].data[5] = selectedVal;
+      document.getElementById("result").innerHTML =
+        '<p style="color: rgb(20, 42, 105); font-size: large; font-weight: bold;">Please Drag And Drop The Red Marker To Enter Your Response </p>';
+      clickedChecker = true;
+      myChart.update();
     }
-
-    let xTop = myChart.chartArea.left;
-    let xBottom = myChart.chartArea.right;
-    let xMin = myChart.scales["x-axis-0"].min;
-    let xMax = myChart.scales["x-axis-0"].max;
-
-    if (event.offsetX <= xBottom && event.offsetX >= xTop) {
-      newX = Math.abs((event.offsetX - xTop) / (xBottom - xTop));
-      newX = newX * Math.abs(xMax - xMin) + xMin;
-    }
-
-    const selectedVal = Math.ceil(newY / 10) * 10;
-
-    myChart.data.datasets[1].data[5] = selectedVal;
-    document.getElementById("result").innerHTML =
-      '<p style="color: rgb(20, 42, 105); font-size: large; font-weight: bold;">Please Drag And Drop The Red Marker To Enter Your Response </p>';
-
-    myChart.update();
     // const res = await axios.get("/check", {
     //   params: { level: questionNumber, value: selectedVal },
     // });
@@ -409,8 +411,16 @@ let myChart = new Chart(ctx, {
             fontColor: "black",
           },
           gridLines: {
-            zeroLineColor: "black",
-            display: false,
+            zeroLineColor: "#FFFFFF",
+            color: [
+              "#FFFFFF",
+              "#FFFFFF",
+              "#FFFFFF",
+              "#FFFFFF",
+              "#FFFFFF",
+              "#E48432",
+              "#FFFFFF",
+            ],
             fontColor: "black",
           },
         },
