@@ -325,7 +325,7 @@ let myChart = new Chart(ctx, {
 
     dragData: true,
     dragX: true,
-    dragDataRound: -1,
+    dragDataRound: 0,
     dragOptions: {
       showTooltip: true,
     },
