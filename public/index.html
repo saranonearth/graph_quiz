@@ -34,14 +34,14 @@
         background-color: #000000;
       }
       .heading {
-        padding: 3%;
-        font-size: 120%;
+        padding: 2%;
+        font-size: 10%;
       }
       button {
         font-size: 20px;
         background-color: #000000;
         color: white;
-        width: 200px;
+        width: 175px;
         border-radius: 60px;
         border: 2px solid white;
         padding: 1%;
@@ -57,6 +57,12 @@
       a:hover {
         text-decoration: none;
         color: white;
+      }
+      .main-text {
+        color: #fff;
+        position: absolute;
+        top: 40%;
+        width: 100%;
       }
     </style>
   </head>
@@ -86,13 +92,6 @@
             alt="First Image"
             style="opacity: 0.5;"
           />
-          <div
-            class="carousel-caption d-md-block"
-            style="margin-bottom: 15%; font-size: 25px;"
-          >
-            <h2 class="heading">Do You Know Your State Well ?</h2>
-            <button><a href="/question1">START QUIZ</a></button>
-          </div>
         </div>
         <div class="carousel-item">
           <img
@@ -101,13 +100,6 @@
             data-color="firebrick"
             alt="Second Image"
           />
-          <div
-            class="carousel-caption d-md-block"
-            style="margin-bottom: 15%; font-size: 25px;"
-          >
-            <h2 class="heading">Do You Know Your State Well ?</h2>
-            <button><a href="/question1">START QUIZ</a></button>
-          </div>
         </div>
         <div class="carousel-item">
           <img
@@ -116,13 +108,6 @@
             data-color="violet"
             alt="Third Image"
           />
-          <div
-            class="carousel-caption d-md-block"
-            style="margin-bottom: 15%; font-size: 25px;"
-          >
-            <h2 class="heading">Do You Know Your State Well ?</h2>
-            <button><a href="/question1">START QUIZ</a></button>
-          </div>
         </div>
       </div>
       <!-- Controls -->
@@ -144,6 +129,14 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="sr-only">Next</span>
       </a>
+    </div>
+    <div class="main-text hidden-xs">
+      <div class="col-md-12 text-center">
+        <h2 class="heading" style="font-size: 30px;">
+          How well do you know your Government?
+        </h2>
+        <button><a href="/question1">START QUIZ</a></button>
+      </div>
     </div>
     <script>
       var $item = $(".carousel-item");
@@ -170,7 +163,7 @@
       });
 
       $(".carousel").carousel({
-        interval: 3000,
+        interval: 2000,
         pause: "false",
       });
     </script>

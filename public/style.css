@@ -1,15 +1,7 @@
 body {
   text-align: center;
   font-family: -apple-system, system-ui, BlinkMacSystemFont;
-  background: -webkit-linear-gradient(
-    left,
-    black 0%,
-    black 3%,
-    #ffffff 3%,
-    #ffffff 97%,
-    black 97%,
-    black 100%
-  );
+  background: -webkit-linear-gradient(left, #ffffff 0%, #ffffff 100%);
 }
 .canvas-container {
   /* background-image: url("./assets/backgraph.png"); */
@@ -19,12 +11,12 @@ body {
   height: 500px;
   width: 80%;
   position: fixed;
-  top: 50%;
+  top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 #myChart {
-  width: 50px;
+  width: 100px;
   height: 500px;
 }
 @font-face {
@@ -34,14 +26,14 @@ body {
 }
 
 #next-btn {
-  width: 10%;
+  width: 15%;
   height: 5%;
   display: none;
   position: absolute;
   text-align: center;
   padding: 5px 10px;
   margin-left: -3%;
-  bottom: 8%;
+  bottom: 5%;
   background-color: #2dcc70;
   border-radius: 5px;
   color: #ffffff;
@@ -76,23 +68,53 @@ body {
   opacity: 1;
   right: 0;
 }
+.home {
+  margin-right: 110px;
+  margin-top: 10px;
+}
+#questionNumber {
+  font-family: -apple-system, system-ui, BlinkMacSystemFont;
+  padding: 7px;
+}
 
+.home {
+  margin-right: 10px;
+  margin-top: 5px;
+}
 @media (max-width: 640px) {
+  #instructions {
+    font-size: 10px;
+    font-family: -apple-system, system-ui, BlinkMacSystemFont;
+  }
+  #result {
+    padding: 4px;
+    font-family: -apple-system, system-ui, BlinkMacSystemFont;
+  }
   body {
     font-size: 11px;
   }
   .canvas-container {
     height: auto;
-    overflow: scroll;
-    top: 55%;
-    left: 48%;
+    overflow: hidden;
+    top: 70%;
+    left: 50%;
+    width: 350px;
   }
   #myChart {
-    height: 100px;
+    height: 3000px;
     width: 500px;
   }
   #next-btn {
     margin-left: -24%;
     width: 50%;
+  }
+  .home {
+    margin-right: 10px;
+    margin-top: 5px;
+    font-family: -apple-system, system-ui, BlinkMacSystemFont;
+  }
+  #questionNumber {
+    font-size: 25px;
+    font-family: -apple-system, system-ui, BlinkMacSystemFont;
   }
 }

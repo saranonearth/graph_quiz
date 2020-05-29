@@ -1,33 +1,52 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <% include ('../partials/head') %>
     <link rel="stylesheet" href="style.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet"
+          href= 
+"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> 
+    
+    <script src= 
+"https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"> 
+  </script> 
+    
+    <script src= 
+"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"> 
+  </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <body>
     <header>
       <% include ('../partials/header') %>
     </header>
     <main>
-      <h1 id="questionNumber" style="color: black;"></h1>
-      
-      <div id="result"> <p style="color: rgb(20, 42, 105); font-size: large; font-weight: bold;">Please Click Anywhere On <span style="color:#e48432">Orange</span> Line to Start</p></div>
+     <button class="btn btn-success pull-right home"> 
+       <a href="/" style="text-decoration:none; color:white;"><i class="fa fa-home" style="font-size:24px"></i></a>
+          </button> 
+      <br/>
+      <h2 id="questionNumber" style="color: black; font-weight:bold; "></h2>
+<div id="result" style="  font-family: -apple-system, system-ui, BlinkMacSystemFont;"> <p style="color: rgb(20, 42, 105); font-size: large;   font-family: -apple-system, system-ui, BlinkMacSystemFont;"  id="instructions" >Please Click Anywhere On <span style="color:#e48432">Orange</span> Line to Start</p></div>
       <div class="canvas-container">
         <canvas id="myChart" onclick="chartClicked(event)"></canvas>
       </div>  
     </main>
     
     <footer>
-      <button id="next-btn" onclick="nextQuestion(event)"><span> Next Question </span></button>
+      <button id="next-btn" onclick="nextQuestion(event)"><span> Next </span></button>
     </footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+  <script src="https://use.fontawesome.com/242415a5f2.js"></script>
   <script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-dragdata@latest/dist/chartjs-plugin-dragdata.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+  <script src="https://use.fontawesome.com/242415a5f2.js"></script>
   <script type='text/javascript' src="assets/graphs.js"></script>
 </body>
 </html>

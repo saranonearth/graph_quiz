@@ -10,4 +10,20 @@ router.get("/question2", (req, res) => {
   res.render("pages/question.ejs");
 });
 
+router.get("/question3", (req, res) => {
+  res.render("pages/question.ejs");
+});
+
+router.get("/question4", (req, res) => {
+  res.render("pages/question.ejs");
+});
+
+router.get("/question5", (req, res) => {
+  res.render("pages/question.ejs");
+});
+
+router.get("/question6", (req, res) => {
+  res.render("pages/question.ejs");
+});
+
 module.exports = router;

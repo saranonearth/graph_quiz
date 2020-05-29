@@ -24,10 +24,10 @@ let labels = [
 
 //Function to go to the next question or submit the data
 const nextQuestion = async (event) => {
-  if (questionNumber === 2) {
+  if (questionNumber === 6) {
     const res = await axios.post("/submit");
     console.log(res.data);
-    window.location.replace("/");
+    window.location.replace("/end");
   } else {
     window.location.replace(`/question${questionNumber + 1}`);
   }
@@ -38,12 +38,12 @@ const showResult = (res) => {
   if (res.data.okay) {
     document.getElementById(
       "result"
-    ).innerHTML = `<p style="font-weight:bold; color:green; font-size:20px;">The correct answer is ${res.data.correct} Lakh</p>`;
+    ).innerHTML = `<p style=" color:green; font-size:20px; padding:5px; font-wight:bold;">${res.data.message}</p>`;
     answerColor = "green";
   } else {
     document.getElementById(
       "result"
-    ).innerHTML = `<p style="font-weight:bold; color:red; font-size:20px;">The correct answer is ${res.data.correct} Lakh</p>`;
+    ).innerHTML = `<p style=" color:red; font-size:20px; padding:5px; font-weight:bold;">${res.data.message}</p>`;
     answerColor = "red";
   }
   myChart.data.datasets[1].borderColor = answerColor;
@@ -57,18 +57,99 @@ const showResult = (res) => {
 //Dataset matrix
 const graphValues = [
   [289, 306, 332, 361, 384],
-  [289, 306, 332, 361, 384],
+  [12.6, 14.3, 15, 17, 17.2],
+  [160, 144, 149, 167, 150],
+  [4363, 3741, 5069, 6332, 6141],
+  [1472, 399, 711, 1740, 2178],
+  [3123, 2720, 4118, 4919, 2814],
 ];
 
 //Dataset for the correct answers
 const correctAnswers = [
   [289, 306, 332, 361, 384],
-  [289, 306, 332, 361, 384],
+  [12.6, 14.3, 15, 17, 17.2],
+  [160, 144, 149, 167, 150],
+  [4363, 3741, 5069, 6332, 6141],
+  [1472, 399, 711, 1740, 2178],
+  [3123, 2720, 4118, 4919, 2814],
 ];
 const yellowLine = [
   [289, 306, 332, 361, 384],
-  [289, 306, 332, 361, 384],
+  [12.6, 14.3, 15, 17, 17.2],
+  [160, 144, 149, 167, 150],
+  [4363, 3741, 5069, 6332, 6141],
+  [1472, 399, 711, 1740, 2178],
+  [3123, 2720, 4118, 4919, 2814],
 ];
+
+//Array of Tick Objects for each array
+const ticksArray = [
+  {
+    beginAtZero: true,
+    max: 500,
+    min: 200,
+    fontColor: "black",
+    color: "black",
+  },
+  {
+    beginAtZero: true,
+    max: 35,
+    min: 12,
+    fontColor: "black",
+    color: "black",
+  },
+  {
+    beginAtZero: true,
+    max: 180,
+    min: 140,
+    fontColor: "black",
+    color: "black",
+  },
+  {
+    beginAtZero: true,
+    max: 13000,
+    min: 3500,
+    fontColor: "black",
+    color: "black",
+  },
+  {
+    beginAtZero: true,
+    max: 5000,
+    min: 350,
+    fontColor: "black",
+    color: "black",
+  },
+  {
+    beginAtZero: true,
+    max: 9000,
+    min: 2500,
+    fontColor: "black",
+    color: "black",
+  },
+];
+
+//Questions Array
+let questions = [
+  "Guess the Cases of Liquor sold in AP in the year 2019-20?",
+  "Guess the amount spent by the Government of AP in Education Sector in the year 2019-20?",
+  "Guess the tonnes of food grains produced in Andhra Pradesh in the year 2019-20?",
+  "Guess the amount spent by the Government of AP on Health Care in the year 2019-20?",
+  "Guess the amount spent by the Government of AP on Industries & Infrastructure in the year 2019-20?",
+  "Guess the amount spent by the Government of AP for the welfare of Backward Classes in the year 2019-20?",
+];
+
+//Label strings Array
+let questionLabels = [
+  "Cases(in Lakhs)",
+  "Budget(in Thousand Crores)",
+  "Budget(in Lakhs)",
+  "Budget(in Crores)",
+  "Budget(in Crores)",
+  "Budget(in Crores)",
+];
+
+//Tooltip labels
+let tooltipLabels = ["Lakh", "Crore", "Crore", "Crore", "Crore", "Crore"];
 
 //Function to re-render chart based on click
 const chartClicked = async (event) => {
@@ -100,25 +181,16 @@ const chartClicked = async (event) => {
 
       myChart.data.datasets[1].data[5] = selectedVal;
       document.getElementById("result").innerHTML =
-        '<p style="color: rgb(20, 42, 105); font-size: large; font-weight: bold;">Please Drag And Drop The Red Marker To Enter Your Response </p>';
+        '<p style="color: rgb(20, 42, 105); font-size: large; ">Please Drag And Drop The Red Marker To Enter Your Response </p>';
       clickedChecker = true;
       myChart.update();
     }
-    // const res = await axios.get("/check", {
-    //   params: { level: questionNumber, value: selectedVal },
-    // });
-    // console.log(res.data);
-    // clicked = true;
-    // showResult(res);
   }
-  //else {
-  //   alert("You cannot change your answer");
-  // }
 };
 
-document.getElementById(
-  "questionNumber"
-).innerHTML = `Q.${questionNumber}  :  Guess the Cases of Liquor sold in AP in the year 2019-20?`;
+document.getElementById("questionNumber").innerHTML = `Q${questionNumber}. ${
+  questions[questionNumber - 1]
+}`;
 const canvasRef = document.getElementById("myChart");
 let ctx = canvasRef.getContext("2d");
 let gradient = null;
@@ -132,7 +204,7 @@ Chart.controllers.line.prototype.draw = function () {
   let _stroke = ctx.stroke;
   ctx.stroke = function () {
     ctx.save();
-    ctx.shadowColor = "#ccc";
+    ctx.shadowColor = "#ffffff";
     ctx.shadowBlur = 8;
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
@@ -201,7 +273,11 @@ let myChart = new Chart(ctx, {
       {
         //Using question number as index to use from dataset matrix
         data: yellowLine[questionNumber - 1],
-
+        datalabels: {
+          labels: {
+            value: null,
+          },
+        },
         backgroundColor: "transparent",
         borderColor: "yellow",
         pointRadius: 1,
@@ -220,7 +296,29 @@ let myChart = new Chart(ctx, {
       {
         //Using question number as index to use from dataset matrix
         data: graphValues[questionNumber - 1],
-
+        datalabels: {
+          labels: [
+            {
+              color: [
+                "transparent",
+                "transparent",
+                "transparent",
+                "transparent",
+                "transparent",
+                "red",
+              ],
+            },
+          ],
+          font: {
+            family: "FontAwesome",
+            size: 24,
+            lineHeight: 0.5,
+          },
+          formatter: (value, context) => {
+            return "\uf062\n\uf063";
+          },
+          align: "right",
+        },
         backgroundColor: "transparent",
         borderColor: function (myChart) {
           var chartArea = myChart.chart.chartArea;
@@ -271,7 +369,11 @@ let myChart = new Chart(ctx, {
       {
         //Using question number as index to use from dataset matrix
         data: correctAnswers[questionNumber - 1],
-
+        datalabels: {
+          labels: {
+            value: null,
+          },
+        },
         backgroundColor: "transparent",
         borderColor: "blue",
         pointRadius: 2,
@@ -298,9 +400,8 @@ let myChart = new Chart(ctx, {
       yPadding: 1,
       displayColors: false,
       bodyFontSize: 10,
-
       yAlign: "bottom",
-      cornerRadius: 4,
+      xAlignadius: 4,
       callbacks: {
         labelColor: function (tooltipItem, chart) {
           return null;
@@ -311,11 +412,15 @@ let myChart = new Chart(ctx, {
       callbacks: {
         // use label callback to return the desired label
         label: function (tooltipItem) {
-          return "lakh";
+          return tooltipLabels[questionNumber - 1];
         },
         // remove title
         title: function (tooltipItem, data) {
-          return tooltipItem[0].yLabel;
+          if (questionNumber === 2) {
+            return tooltipItem[0].yLabel + "K";
+          } else {
+            return tooltipItem[0].yLabel;
+          }
         },
       },
     },
@@ -335,7 +440,7 @@ let myChart = new Chart(ctx, {
         if (!clicked) {
           document.getElementById(
             "result"
-          ).innerHTML = `<p style="color: rgb(20, 42, 105); font-size: large; font-weight: bold;">Release The Point On Your Desired Response</p>`;
+          ).innerHTML = `<p style="color: rgb(20, 42, 105); font-size: large; ">Release The Point On Your Desired Response</p>`;
         } else {
           alert("You cannot change your answer");
         }
@@ -376,25 +481,19 @@ let myChart = new Chart(ctx, {
         {
           scaleLabel: {
             display: true,
-            labelString: "Budget (in Lakh)",
+            labelString: questionLabels[questionNumber - 1],
             fontColor: "black",
             fontSize: 15,
             color: "black",
           },
-          ticks: {
-            beginAtZero: true,
-            max: 500,
-            min: 200,
-            fontColor: "black",
-            color: "black",
-          },
+          ticks: ticksArray[questionNumber - 1],
           gridLines: {
             drawBorder: false,
             zeroLineColor: "black",
             display: true,
             fontColor: "black",
           },
-          label: "Budget (in Lakh)",
+          label: questionLabels[questionNumber - 1],
         },
       ],
       xAxes: [
