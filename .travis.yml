@@ -12,15 +12,12 @@ before_deploy: "echo 'ready?'"
 
 deploy:
   provider: elasticbeanstalk
-  access_key_id: $ACCESSKEYID
-  secret_access_key:
-    secure: "$SECRETACCESSKEY"
-  region: "ca-central-1"
-  app: "elastic-beanstalk-tutorial"
-  env: "elastic-beanstalk-tutorial-dev"
-  bucket_name: "elasticbeanstalk-ca-central-1-882371129764"
+  access_key_id: $ACCESS_KEY
+  secret_access_key: "$SECRET_KEY"
+  region: "ap-south-1"
+  app: "graph-survey"
+  env: "GraphSurvey-env"
+  bucket_name: "elasticbeanstalk-ap-south-1-517624996423"
+  bucket_path: "graph-survey"
   on:
     branch: master
-
-after_deploy:
-  - echo "done deploying"
